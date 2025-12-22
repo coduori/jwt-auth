@@ -1,0 +1,71 @@
+{
+  "name": "brandon",
+  "version": "1.0.0",
+  "description": "This project is dedicated to my Dear brother Brandon, a cyber security professional; Good luck cracking the token!",
+  "homepage": "https://github.com/coduori/jwt-auth#readme",
+  "bugs": {
+    "url": "https://github.com/coduori/jwt-auth/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coduori/jwt-auth.git"
+  },
+  "license": "UNLICENSED",
+  "author": "Oduori Oranga <oduori.oranga@gmail.com>",
+  "type": "module",
+  "main": "src/app.mjs",
+  "scripts": {
+    "lint": "eslint .",
+    "dev": "node --inspect --watch-path=./ ./src/app.mjs",
+    "secrets": "sh ./scripts/upload-env.sh",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "db": "docker compose up -d",
+    "format:check": "prettier --check .",
+    "test": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles",
+    "test:watch": "yarn lint && yarn test -- --watch",
+    "start": "node src/app.mjs",
+    "ci": "yarn format:check && yarn lint && npm test",
+    "snyk:scan": "dotenv snyk test --all-projects",
+    "security": "yarn snyk:scan"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.1",
+    "compression": "^1.8.1",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "http": "^0.0.1-security",
+    "pg": "^8.16.3",
+    "pino": "^10.1.0",
+    "rate-limiter-flexible": "^9.0.0",
+    "redis": "^5.10.0",
+    "reflect-metadata": "^0.2.2",
+    "tslib": "^2.8.1",
+    "typeorm": "^0.3.28",
+    "undici": "^7.16.0",
+    "yup": "^1.7.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@jest/globals": "^30.2.0",
+    "cross-env": "^10.1.0",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jest": "^29.2.1",
+    "eslint-plugin-n": "^17.23.1",
+    "eslint-plugin-promise": "^7.2.1",
+    "eslint-plugin-security": "^3.0.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-sonarjs": "^3.0.5",
+    "eslint-plugin-testing-library": "^7.13.5",
+    "eslint-plugin-unicorn": "^62.0.0",
+    "globals": "^16.5.0",
+    "jest": "^30.2.0",
+    "prettier": "^3.7.4",
+    "snyk": "^1.1301.0"
+  }
+}
