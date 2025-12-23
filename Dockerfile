@@ -9,7 +9,7 @@ COPY .yarnrc.yml ./
 
 RUN corepack enable
 
-RUN yarn install --immutable --production && yarn cache clean
+RUN yarn install --immutable && yarn cache clean
 
 COPY src ./src
 
