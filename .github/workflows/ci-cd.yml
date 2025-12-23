@@ -1,0 +1,52 @@
+name: CI/CD Pipeline
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+
+permissions:
+    contents: write
+
+jobs:
+    test:
+        name: Lint, Format
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: 'npm'
+            - run: npm ci
+
+            - name: Check code formatting
+              run: npm run format:check
+
+            - name: Lint code
+              run: npm run lint
+
+    release:
+        name: version bump
+        needs: test
+        runs-on: ubuntu-latest
+        outputs:
+            release_created: ${{ steps.release.outputs.release_created }}
+        steps:
+            - name: Set up Release Please
+              id: release
+              uses: GoogleCloudPlatform/release-please-action@v4
+              with:
+                  token: ${{ secrets.ANCHORAGE_RELEASE_WORKFLOW_TOKEN }}
+                  release-type: node
+                  bump-minor-pre-major: true
+                  versioning-strategy: default
+
+            - name: Merge release PR
+              if: ${{ steps.release.outputs.pr != '' }}
+              uses: peter-evans/enable-pull-request-automerge@v3
+              with:
+                  token: ${{ secrets.ANCHORAGE_RELEASE_WORKFLOW_TOKEN }}
+                  pull-request-number: ${{ fromJson(steps.release.outputs.pr).number }}
+                  merge-method: squash
