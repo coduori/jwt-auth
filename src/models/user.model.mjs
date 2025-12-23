@@ -10,10 +10,10 @@ const create = async (userData) => UserModel.create(userData);
 
 const findUserBy = async (parameter, value) => UserModel.findByFields({ [parameter]: value });
 
-const findForAuth = async (parameter, value) =>
+const findForAuth = async (value) =>
     UserModel.query('users')
         .addSelect('users.passwordHash')
-        .where(`users.${parameter} = :value `, { value })
+        .where('(users.email = :value OR users.username = :value)', { value })
         .getOne();
 
 const update = async (userId, userDetails) => UserModel.update({ id: userId }, userDetails);

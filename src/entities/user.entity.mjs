@@ -15,7 +15,13 @@ export default new EntitySchema({
         email: {
             type: 'varchar',
             length: 255,
-            nullable: false,
+            nullable: true,
+            unique: true,
+        },
+        username: {
+            type: 'varchar',
+            length: 255,
+            nullable: true,
             unique: true,
         },
         role: {
@@ -51,8 +57,22 @@ export default new EntitySchema({
     ],
     indices: [
         {
+            name: 'IDX_NOT_NULL_USER_EMAIL',
+            columns: ['email'],
+            where: 'email IS NOT NULL',
+        },
+        {
+            name: 'IDX_NOT_NULL_USERNAME',
+            columns: ['username'],
+            where: 'username IS NOT NULL',
+        },
+        {
             name: 'IDX_USER_EMAIL',
             columns: ['email'],
+        },
+        {
+            name: 'IDX_USERNAME',
+            columns: ['username'],
         },
     ],
 });

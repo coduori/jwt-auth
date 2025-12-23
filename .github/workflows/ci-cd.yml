@@ -118,7 +118,7 @@ jobs:
             - name: Setup environment on VM
               env:
                   VM_IP: ${{ vars.VM_IP_ADDRESS }}
-                  VM_USER: 'oduori'
+                  VM_USER: ${{ vars.VM_USER }}
                   GPG_PASSPHRASE: ${{ secrets.ENV_ENCRYPTION_PASSPHRASE }}
               run: |
                   ssh ${{ env.VM_USER }}@${{ vars.VM_IP_ADDRESS }}  << 'ENV_SETUP'
@@ -154,14 +154,12 @@ jobs:
                   ssh ${{ env.VM_USER }}@${{ vars.VM_IP_ADDRESS }} << 'DEPLOY'
                     set -e
                     echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' | docker login -u _json_key --password-stdin ${{ env.REGISTRY }}
-                    # Pull the latest image
+
                     docker pull '${{ env.LATEST_IMAGE }}'
                     
-                    # Stop and remove old container
                     docker stop registry || true
                     docker rm  registry || true
                     
-                    # Run new container
                     docker run -d \
                       --name registry \
                       --restart unless-stopped \
