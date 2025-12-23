@@ -1,21 +1,30 @@
 import { setKey } from '../db/redis.mjs';
-import { create, findUserBy } from '../models/user.model.mjs';
+import { create, findForAuth, findUserBy } from '../models/user.model.mjs';
 import { hashPassword, signToken, verifyPassword } from '../utils/index.mjs';
 
 const registerUser = async ({ email, password, role }) => {
-    await create({
-        email,
-        passwordHash: await hashPassword(password),
-        role,
-    });
-    const createduser = await findUserBy('email', email);
-    return createduser;
+    try {
+        const response = await create({
+            email,
+            passwordHash: await hashPassword(password),
+            role,
+        });
+        if (!response.success) {
+            return response;
+        }
+    } catch (error) {
+        return error;
+    }
+    return findUserBy('email', email);
 };
 
 const authenticateUser = async ({ email, password }) => {
-    const user = await findUserBy('email', email);
+    const user = await findForAuth('email', email);
+    if (!user) {
+        return { success: false, message: 'invalid credentials' };
+    }
     if (user) {
-        const verifiedPassword = await verifyPassword(password, user.password);
+        const verifiedPassword = await verifyPassword(password, user.passwordHash);
         if (!verifiedPassword) {
             return { success: false, message: 'invalid credentials' };
         }

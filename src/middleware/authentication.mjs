@@ -1,11 +1,11 @@
 import { getKey } from '../db/redis.mjs';
+import { userRoles } from '../utils/entity-enums.mjs';
 import { extractBearerToken } from '../utils/extract-bearer-token.mjs';
 import { verifyToken } from '../utils/index.mjs';
 
-export const authenticate = async (req, res, next) => {
+const authenticate = async (req, res, next) => {
     const token = extractBearerToken(req);
-
-    if (!token) return res.sendStatus(401);
+    if (!token) return res.status(401).json({ success: false, messge: 'invalid credentials!' });
 
     try {
         const decodedToken = verifyToken(token);
@@ -20,3 +20,15 @@ export const authenticate = async (req, res, next) => {
         res.status(401).json({ success: false, messge: 'invalid credentials!' });
     }
 };
+
+const authorizeAdmin = async (req, res, next) => {
+    if (!req.user)
+        return res.status(403).json({ success: false, messge: 'Admin access required!' });
+    const { role } = req.user;
+    if (![userRoles.ADMIN].includes(role)) {
+        return res.status(403).json({ success: false, messge: 'Admin access required!' });
+    }
+    next();
+};
+
+export { authenticate, authorizeAdmin };

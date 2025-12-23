@@ -25,6 +25,7 @@ export default new EntitySchema({
         },
         passwordHash: {
             type: 'varchar',
+            select: false,
             length: 255,
             nullable: false,
             name: 'password_hash',

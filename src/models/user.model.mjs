@@ -1,39 +1,21 @@
 import { AppDataSource } from '../db/postgres.mjs';
 import User from '../entities/user.entity.mjs';
+import { BaseModel } from './base.model.mjs';
 
 const userRepository = AppDataSource.getRepository(User);
 
-const create = async (userData) => {
-    try {
-        const newUser = userRepository.create(userData);
-        return await userRepository.save(newUser);
-    } catch (err) {
-        throw new Error(err);
-    }
-};
+const UserModel = new BaseModel(userRepository);
 
-const find = async (userId) => {
-    try {
-        return await userRepository.findOne({ where: { id: userId } });
-    } catch (err) {
-        throw new Error(err);
-    }
-};
+const create = async (userData) => UserModel.create(userData);
 
-const findUserBy = async (parameter, value) => {
-    try {
-        return await userRepository.find({ where: { [parameter]: value } });
-    } catch (err) {
-        throw new Error(err);
-    }
-};
+const findUserBy = async (parameter, value) => UserModel.findByFields({ [parameter]: value });
 
-const update = async (userId, userDetails) => {
-    try {
-        return await userRepository.update({ id: userId }, userDetails);
-    } catch (err) {
-        throw new Error(err);
-    }
-};
+const findForAuth = async (parameter, value) =>
+    UserModel.query('users')
+        .addSelect('users.passwordHash')
+        .where(`users.${parameter} = :value `, { value })
+        .getOne();
 
-export { create, find, findUserBy, update };
+const update = async (userId, userDetails) => UserModel.update({ id: userId }, userDetails);
+
+export { create, findForAuth, findUserBy, update };

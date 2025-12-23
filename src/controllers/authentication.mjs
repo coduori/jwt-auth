@@ -1,16 +1,19 @@
 import { Router } from 'express';
 import { ValidationError } from 'yup';
 
-import { authenticate } from '../middleware/authentication.mjs';
+import { authenticate, authorizeAdmin } from '../middleware/authentication.mjs';
 import { authenticateUser, logoutUser, registerUser } from '../services/authentication.mjs';
 import { createUserSchema, loginSchema } from './authentication.schema.mjs';
 
 const router = new Router();
 
-router.post('/register', async (req, res) => {
+router.post('/register', authenticate, authorizeAdmin, async (req, res) => {
     try {
         createUserSchema.validateSync(req.body, { abortEarly: false });
         const response = await registerUser(req.body);
+        if (!response.success) {
+            return res.status(400).json({ ...response });
+        }
         res.status(201).json({ ...response });
     } catch (error) {
         if (error instanceof ValidationError) {
@@ -38,7 +41,7 @@ router.post('/login', async (req, res) => {
 router.post('/logout', authenticate, async (req, res) => {
     try {
         await logoutUser(req.user);
-        res.status(204).json({ success: true, message: 'logout successful!' });
+        res.status(200).json({ success: true, message: 'Logged out successfully!' });
     } catch (error) {
         res.status(401).json({ success: false, error });
     }
