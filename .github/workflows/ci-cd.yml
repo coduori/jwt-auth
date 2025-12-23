@@ -74,7 +74,7 @@ jobs:
               id: meta
               uses: docker/metadata-action@v5
               with:
-                  images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+                  images: ${{ vars.REGISTRY }}/${{ vars.IMAGE_NAME }}
                   tags: |
                       ${{ needs.release.outputs.new_version }}
                       latest
