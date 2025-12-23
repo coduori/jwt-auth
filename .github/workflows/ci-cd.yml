@@ -15,11 +15,19 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
+
             - uses: actions/setup-node@v4
               with:
                   node-version: 20
-                  cache: 'npm'
-            - run: yarn install --frozen-lockfile
+                  cache: 'yarn'
+
+            - name: Enable Corepack
+              run: |
+                  corepack enable
+                  corepack prepare yarn@4.12.0 --activate
+
+            - name: Install dependencies
+              run: yarn install --immutable
 
             - name: Check code formatting
               run: yarn format:check
