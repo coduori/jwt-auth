@@ -76,7 +76,7 @@ jobs:
                   credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
             - name: Configure Docker
-              run: gcloud auth configure-docker gcr.io --quiet
+              run: gcloud auth configure-docker ${{ vars.REGISTRY_DOMAIN }} --quiet
 
             - name: Extract metadata for Docker
               id: meta
