@@ -19,13 +19,13 @@ jobs:
               with:
                   node-version: 20
                   cache: 'npm'
-            - run: npm ci
+            - run: yarn install --frozen-lockfile
 
             - name: Check code formatting
-              run: npm run format:check
+              run: yarn format:check
 
             - name: Lint code
-              run: npm run lint
+              run: yarn lint
 
     release:
         name: version bump
