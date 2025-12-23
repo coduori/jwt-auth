@@ -173,4 +173,3 @@ jobs:
                     
                     docker image prune -af
                   DEPLOY
-
