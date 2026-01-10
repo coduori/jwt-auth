@@ -120,6 +120,14 @@ jobs:
               with:
                   credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
+            - name: Get Service Account Email
+              env:
+                SA_KEY_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+              run: |
+                # Using Node.js
+                CLIENT_EMAIL=$(node -e "console.log(JSON.parse(process.env.SA_KEY_JSON).client_email)")
+                echo "Service account email: $CLIENT_EMAIL"
+
             - name: Setup environment on VM
               env:
                   VM_IP: ${{ vars.VM_IP_ADDRESS }}
@@ -128,7 +136,7 @@ jobs:
               run: |
                   ssh ${{ env.VM_USER }}@${{ vars.VM_IP_ADDRESS }}  << 'ENV_SETUP'
                     set -e
-                    echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+
                     sudo mkdir -p /opt/registry
                     sudo chown $USER:$USER /opt/registry
                     
