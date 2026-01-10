@@ -9,6 +9,11 @@ on:
 permissions:
     contents: write
 
+env:
+    REGISTRY: africa-south1-docker.pkg.dev
+    IMAGE_NAME: ${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}/anchorage/registry
+    VM_USER: oduori
+
 jobs:
     test:
         name: Lint, Format
