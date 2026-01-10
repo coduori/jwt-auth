@@ -11,7 +11,7 @@ permissions:
 
 env:
     REGISTRY: africa-south1-docker.pkg.dev
-    IMAGE_NAME: ${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}/anchorage/registry
+    IMAGE_NAME: ${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}/anchorage/user-service
     VM_USER: oduori
 
 jobs:
