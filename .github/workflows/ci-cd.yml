@@ -144,6 +144,7 @@ jobs:
                     rm -f /tmp/.env.production.gpg
                     
                     echo "✅ Environment setup complete!"
+                    echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' | docker login -u _json_key --password-stdin ${{ env.REGISTRY }}
 
                     docker pull '${{ env.LATEST_IMAGE }}'
                     
