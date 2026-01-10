@@ -153,6 +153,7 @@ jobs:
               run: |
                   ssh ${{ env.VM_USER }}@${{ vars.VM_IP_ADDRESS }} << 'DEPLOY'
                     set -e
+                    echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' 
                     echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' | docker login -u _json_key --password-stdin ${{ env.REGISTRY }}
 
                     docker pull '${{ env.LATEST_IMAGE }}'
