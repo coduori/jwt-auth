@@ -154,7 +154,7 @@ jobs:
                     docker run -d \
                       --name registry \
                       --restart unless-stopped \
-                      --network=app_internal \
+                      --network=registry_internal \
                       -p 4000:4000 \
                       --env-file /opt/registry/.env \
                       -e NODE_ENV=production \
