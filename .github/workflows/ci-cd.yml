@@ -121,6 +121,13 @@ jobs:
                   VM_USER: ${{ vars.VM_USER }}
                   GPG_PASSPHRASE: ${{ secrets.ENV_ENCRYPTION_PASSPHRASE }}
               run: |
+                  # Debug: Check if SSH key is loaded
+                    echo "Checking SSH agent..."
+                    ssh-add -l
+                    
+                    # Debug: Test basic SSH connection first
+                    echo "Testing SSH connection..."
+                    ssh -vvv ${{ env.VM_USER }}@${{ vars.VM_IP_ADDRESS }} "echo 'SSH connection successful'"
                   ssh ${{ env.VM_USER }}@${{ vars.VM_IP_ADDRESS }}  << 'ENV_SETUP'
                     set -e
                                   
