@@ -115,19 +115,6 @@ jobs:
                   mkdir -p ~/.ssh
                   ssh-keyscan ${{ vars.VM_IP_ADDRESS }} >> ~/.ssh/known_hosts
 
-            - name: Authenticate to Google Cloud
-              uses: google-github-actions/auth@v1
-              with:
-                  credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-
-            - name: Get Service Account Email
-              env:
-                  SA_KEY_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-              run: |
-                  # Using Node.js
-                  CLIENT_EMAIL=$(node -e "console.log(JSON.parse(process.env.SA_KEY_JSON).client_email)")
-                  echo "Service account email: $CLIENT_EMAIL"
-
             - name: Setup environment on VM
               env:
                   VM_IP: ${{ vars.VM_IP_ADDRESS }}
