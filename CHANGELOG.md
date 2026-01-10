@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/coduori/jwt-auth/compare/v1.1.1...v1.1.2) (2026-01-10)
+
+
+### Bug Fixes
+
+* optimize GC auth ([11fc440](https://github.com/coduori/jwt-auth/commit/11fc440c0ee87a0c3ea7fc813f7587bfe1d6e263))
+
 ## [1.1.1](https://github.com/coduori/jwt-auth/compare/v1.1.0...v1.1.1) (2026-01-10)
 
 
