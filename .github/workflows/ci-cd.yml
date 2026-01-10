@@ -115,6 +115,11 @@ jobs:
                   mkdir -p ~/.ssh
                   ssh-keyscan ${{ vars.VM_IP_ADDRESS }} >> ~/.ssh/known_hosts
 
+            - name: Authenticate to Google Cloud
+              uses: google-github-actions/auth@v1
+              with:
+                  credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
             - name: Setup environment on VM
               env:
                   VM_IP: ${{ vars.VM_IP_ADDRESS }}
@@ -124,25 +129,20 @@ jobs:
                   ssh ${{ env.VM_USER }}@${{ vars.VM_IP_ADDRESS }}  << 'ENV_SETUP'
                     set -e
                                   
-                    sudo mkdir -p /opt/app
-                    sudo chown $USER:$USER /opt/app
+                    sudo mkdir -p /opt/registry
+                    sudo chown $USER:$USER /opt/registry
                     
                     rm -f /tmp/.env.production.gpg
-                    rm -f /opt/app/.env
+                    rm -f /opt/registry/.env
                     
                     gsutil cp gs://anchorage-secrets-registry-service/.env.production.gpg /tmp/
 
-                    echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --batch --yes --passphrase-fd 0 --decrypt /tmp/.env.production.gpg > /opt/app/.env
-                    chmod 600 /opt/app/.env
+                    echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --batch --yes --passphrase-fd 0 --decrypt /tmp/.env.production.gpg > /opt/registry/.env
+                    chmod 600 /opt/registry/.env
                     rm -f /tmp/.env.production.gpg
                     
                     echo "✅ Environment setup complete!"
                   ENV_SETUP
-
-            - name: Authenticate to Google Cloud
-              uses: google-github-actions/auth@v1
-              with:
-                  credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
             - name: Deploy application to VM
               env:
@@ -153,8 +153,6 @@ jobs:
               run: |
                   ssh ${{ env.VM_USER }}@${{ vars.VM_IP_ADDRESS }} << 'DEPLOY'
                     set -e
-                    echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' 
-                    echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' | docker login -u _json_key --password-stdin ${{ env.REGISTRY }}
 
                     docker pull '${{ env.LATEST_IMAGE }}'
                     
@@ -166,7 +164,7 @@ jobs:
                       --restart unless-stopped \
                       --network=app_internal \
                       -p 4000:4000 \
-                      --env-file /opt/app/.env \
+                      --env-file /opt/registry/.env \
                       -e NODE_ENV=production \
                       '${{ env.LATEST_IMAGE }}'
                     
