@@ -128,7 +128,7 @@ jobs:
               run: |
                   ssh ${{ env.VM_USER }}@${{ vars.VM_IP_ADDRESS }}  << 'ENV_SETUP'
                     set -e
-                                  
+                    echo ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
                     sudo mkdir -p /opt/registry
                     sudo chown $USER:$USER /opt/registry
                     
