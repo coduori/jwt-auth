@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/coduori/jwt-auth/compare/v1.0.0...v1.1.0) (2026-01-10)
+
+
+### Features
+
+* add username support for policy-holder roles ([78b8435](https://github.com/coduori/jwt-auth/commit/78b843523da6f8fec8b64e173188af7974d81145))
+
 ## 1.0.0 (2025-12-23)
 
 ### Features
