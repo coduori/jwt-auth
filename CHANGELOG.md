@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/coduori/jwt-auth/compare/v1.1.0...v1.1.1) (2026-01-10)
+
+
+### Bug Fixes
+
+* untrack CHANGELOG.md from formatting ([1f8321c](https://github.com/coduori/jwt-auth/commit/1f8321cf0e7bb4a1d6e527120767ddf52a3948c2))
+
 ## [1.1.0](https://github.com/coduori/jwt-auth/compare/v1.0.0...v1.1.0) (2026-01-10)
 
 ### Features
