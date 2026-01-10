@@ -115,13 +115,15 @@ jobs:
                   mkdir -p ~/.ssh
                   ssh-keyscan ${{ vars.VM_IP_ADDRESS }} >> ~/.ssh/known_hosts
 
-            - name: Setup environment on VM
+            - name: Deploy application to VM
               env:
                   VM_IP: ${{ vars.VM_IP_ADDRESS }}
                   VM_USER: ${{ vars.VM_USER }}
                   GPG_PASSPHRASE: ${{ secrets.ENV_ENCRYPTION_PASSPHRASE }}
+                  REGISTRY: ${{ env.REGISTRY }}
+                  LATEST_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
               run: |
-                  ssh ${{ env.VM_USER }}@${{ vars.VM_IP_ADDRESS }}  << 'ENV_SETUP'
+                  ssh ${{ env.VM_USER }}@${{ vars.VM_IP_ADDRESS }}  << 'DEPLOY'
                     set -e
 
                     sudo mkdir -p /opt/registry
@@ -137,17 +139,6 @@ jobs:
                     rm -f /tmp/.env.production.gpg
                     
                     echo "✅ Environment setup complete!"
-                  ENV_SETUP
-
-            - name: Deploy application to VM
-              env:
-                  VM_IP: ${{ vars.VM_IP_ADDRESS }}
-                  VM_USER: ${{ vars.VM_USER }}
-                  REGISTRY: ${{ env.REGISTRY }}
-                  LATEST_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-              run: |
-                  ssh ${{ env.VM_USER }}@${{ vars.VM_IP_ADDRESS }} << 'DEPLOY'
-                    set -e
 
                     docker pull '${{ env.LATEST_IMAGE }}'
                     
