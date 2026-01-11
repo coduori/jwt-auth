@@ -10,9 +10,9 @@ permissions:
     contents: write
 
 env:
-    REGISTRY: africa-south1-docker.pkg.dev
-    IMAGE_NAME: ${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}/anchorage/${{ vars.IMAGE_NAME }}
-    VM_USER: oduori
+    REGISTRY: ${{ vars.REGISTRY }}
+    IMAGE_NAME: ${{ vars.IMAGE_NAME }}
+    VM_USER: ${{ vars.VM_USER }}
 
 jobs:
     test:
