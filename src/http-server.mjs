@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser';
 import compression from 'compression';
+import cors from 'cors';
 
 import api from './controllers/index.mjs';
 import { logger } from './utils/logger.mjs';
@@ -13,6 +14,15 @@ export default async function setup({ app, port }) {
     app.use(
         bodyParser.urlencoded({
             extended: true,
+        })
+    );
+
+    app.use(
+        cors({
+            origin: 'http://localhost:3000',
+            credentials: true,
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Explicitly include OPTIONS
+            allowedHeaders: ['Content-Type', 'Authorization'],
         })
     );
 

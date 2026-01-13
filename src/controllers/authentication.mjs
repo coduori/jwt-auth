@@ -7,7 +7,8 @@ import { createUserSchema, loginSchema } from './authentication.schema.mjs';
 
 const router = new Router();
 
-router.post('/register', authenticate, authorizeAdmin, async (req, res) => {
+// authenticate, authorizeAdmin,
+router.post('/register',  async (req, res) => {
     try {
         createUserSchema.validateSync(req.body, { abortEarly: false });
         const response = await registerUser(req.body);
