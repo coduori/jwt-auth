@@ -19,9 +19,9 @@ export default async function setup({ app, port }) {
 
     app.use(
         cors({
-            origin: 'http://localhost:3000',
+            origin: '*',
             credentials: true,
-            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Explicitly include OPTIONS
+            methods: ['GET', 'POST', 'PUT', 'DELETE'],
             allowedHeaders: ['Content-Type', 'Authorization'],
         })
     );

@@ -1,14 +1,14 @@
 import { Router } from 'express';
 import { ValidationError } from 'yup';
 
-import { authenticate, authorizeAdmin } from '../middleware/authentication.mjs';
+import { authenticate } from '../middleware/authentication.mjs';
 import { authenticateUser, logoutUser, registerUser } from '../services/authentication.mjs';
 import { createUserSchema, loginSchema } from './authentication.schema.mjs';
 
 const router = new Router();
 
 // authenticate, authorizeAdmin,
-router.post('/register',  async (req, res) => {
+router.post('/register', async (req, res) => {
     try {
         createUserSchema.validateSync(req.body, { abortEarly: false });
         const response = await registerUser(req.body);
